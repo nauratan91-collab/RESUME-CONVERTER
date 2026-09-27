@@ -1,0 +1,23 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.venv/
+env/
+venv/
+.DS_Store
+Thumbs.db
+
+# Temporary output files (keep samples)
+output/*
+!output/sample_resume.docx
+
+# Temporary upload files (keep samples)
+uploads/*
+!uploads/sample_resume.pdf
+!uploads/test_sarah.pptx
+!uploads/sample_resume_scan.png
+
+.vscode/
+.idea/

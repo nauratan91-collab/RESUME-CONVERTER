@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Key Dynamics Solutions | Enterprise Resume to Word (.docx) Converter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="app-navbar">
+    <div class="nav-container">
+      <div class="brand-group">
+        <img src="/static/images/company_logo.png" alt="Key Dynamics Solutions" class="nav-logo" id="navLogoImg">
+        <div class="brand-divider"></div>
+        <div class="brand-title-box">
+          <span class="app-title">Resume Studio</span>
+          <span class="app-subtitle">Corporate Word Converter & Header Styler</span>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <button class="btn-ghost" id="openSettingsBtn" title="AI & API Settings">
+          <i class="fa-solid fa-gear"></i> AI OCR Settings
+        </button>
+        <button class="btn-secondary" id="loadSampleBtn" title="Load sample resume to test immediately">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Load Sample Data
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-content">
+    
+    <!-- Hero Banner -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="badge-pill">
+          <span class="badge-dot"></span>
+          <span>Multi-Format Ingestion: PDF • PPT / PPTX • Images • Word</span>
+        </div>
+        <h1>Convert Resumes to Branded <span>Word Documents</span></h1>
+        <p>Seamlessly ingest PDF, PowerPoint presentations, or image resumes, parse and structure candidate details, and export executive Word documents formatted with your official company logo in the header.</p>
+      </div>
+    </section>
+
+    <!-- Two-Column Workflow Section -->
+    <div class="workflow-grid">
+      
+      <!-- LEFT COLUMN: Upload & Document Header Configuration -->
+      <div class="config-column">
+        
+        <!-- Upload Card -->
+        <div class="card upload-card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fa-solid fa-cloud-arrow-up text-cyan"></i>
+              <span>1. Upload Resume</span>
+            </div>
+            <span class="file-badge">PDF, PPTX, PNG, JPG, DOCX</span>
+          </div>
+
+          <div class="dropzone" id="dropzone">
+            <input type="file" id="resumeFileInput" accept=".pdf,.pptx,.ppt,.png,.jpg,.jpeg,.webp,.docx,.txt" hidden>
+            <div class="dropzone-inner" id="dropzoneContent">
+              <div class="upload-icon-circle">
+                <i class="fa-solid fa-file-arrow-up"></i>
+              </div>
+              <h3>Drag & drop resume here</h3>
+              <p>or <button type="button" class="link-btn" id="browseFileBtn">browse from your computer</button></p>
+              <div class="supported-formats">
+                <span><i class="fa-regular fa-file-pdf"></i> PDF</span>
+                <span><i class="fa-regular fa-file-powerpoint"></i> PPT / PPTX</span>
+                <span><i class="fa-regular fa-file-image"></i> Images</span>
+                <span><i class="fa-regular fa-file-word"></i> Word DOCX</span>
+              </div>
+            </div>
+
+            <!-- Uploading / Processing State -->
+            <div class="processing-state" id="processingState" style="display: none;">
+              <div class="spinner"></div>
+              <h4 id="processingTitle">Extracting resume structure...</h4>
+              <p id="processingSubtitle">Analyzing text, dates, roles and competencies</p>
+            </div>
+          </div>
+
+          <div class="active-file-strip" id="activeFileStrip" style="display: none;">
+            <div class="file-info-col">
+              <i class="fa-solid fa-file-lines file-icon"></i>
+              <div>
+                <strong id="activeFileName">resume.pdf</strong>
+                <span id="activeFileType">PDF Document</span>
+              </div>
+            </div>
+            <button class="btn-icon" id="clearFileBtn" title="Remove file"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+        </div>
+
+        <!-- Word Document Header Styler Card -->
+        <div class="card header-styler-card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fa-solid fa-stamp text-indigo"></i>
+              <span>2. Word Header & Branding</span>
+            </div>
+            <span class="badge-status">Active Header</span>
+          </div>
+
+          <!-- Live Header Preview -->
+          <div class="header-preview-container">
+            <div class="preview-label"><i class="fa-solid fa-eye"></i> Word Document Header Preview</div>
+            <div class="word-header-mockup" id="headerMockup">
+              <div class="mockup-logo-wrap" id="mockupLogoWrap">
+                <img src="/static/images/company_logo.png" alt="Company Logo" id="headerMockupImg">
+              </div>
+              <div class="mockup-tagline" id="mockupTaglineText">
+                CONFIDENTIAL CANDIDATE DOSSIER | KEY DYNAMICS SOLUTIONS
+              </div>
+              <div class="mockup-divider" id="mockupDivider"></div>
+            </div>
+          </div>
+
+          <!-- Styler Controls -->
+          <div class="controls-form">
+            
+            <div class="control-group">
+              <label for="headerAlignSelect"><i class="fa-solid fa-arrows-left-right"></i> Header Layout & Alignment</label>
+              <div class="segmented-control" id="headerAlignSegment">
+                <button type="button" class="seg-btn active" data-align="dual">
+                  <i class="fa-solid fa-table-columns"></i> Dual (Logo + Tagline)
+                </button>
+                <button type="button" class="seg-btn" data-align="right">
+                  <i class="fa-solid fa-align-right"></i> Right Logo
+                </button>
+                <button type="button" class="seg-btn" data-align="left">
+                  <i class="fa-solid fa-align-left"></i> Left Logo
+                </button>
+                <button type="button" class="seg-btn" data-align="center">
+                  <i class="fa-solid fa-align-center"></i> Center Logo
+                </button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="headerTaglineInput"><i class="fa-solid fa-heading"></i> Header Tagline / Watermark Text</label>
+              <input type="text" id="headerTaglineInput" class="form-input" value="CONFIDENTIAL CANDIDATE DOSSIER | KEY DYNAMICS SOLUTIONS">
+            </div>
+
+            <div class="control-row">
+              <div class="control-group flex-1">
+                <label for="themeSelect"><i class="fa-solid fa-palette"></i> Palette & Theme</label>
+                <select id="themeSelect" class="form-select">
+                  <option value="key_dynamics" selected>Key Dynamics (Navy & Cyan)</option>
+                  <option value="modern_teal">Modern Teal & Cyan</option>
+                  <option value="classic_blue">Corporate Royal Blue</option>
+                  <option value="sleek_dark">Sleek Charcoal & Platinum</option>
+                </select>
+              </div>
+
+              <div class="control-group flex-1">
+                <label for="logoSizeRange"><i class="fa-solid fa-ruler-horizontal"></i> Logo Width: <span id="logoSizeLabel">2.3"</span></label>
+                <input type="range" id="logoSizeRange" min="1.6" max="3.0" step="0.1" value="2.3" class="form-range">
+              </div>
+            </div>
+
+            <!-- Custom Logo Upload Toggle -->
+            <div class="logo-swap-row">
+              <label class="custom-logo-label" for="customLogoInput">
+                <i class="fa-solid fa-upload"></i> Change / Upload Different Logo
+              </label>
+              <input type="file" id="customLogoInput" accept="image/*" hidden>
+              <button type="button" class="btn-link" id="resetLogoBtn">Reset to Default Logo</button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Parsed Resume Editor & Live Document Structure -->
+      <div class="editor-column">
+        
+        <div class="card editor-card">
+          <div class="card-header editor-header">
+            <div class="card-title">
+              <i class="fa-solid fa-pen-to-square text-cyan"></i>
+              <span>3. Review & Edit Structured Resume</span>
+            </div>
+            <div class="editor-actions">
+              <button class="btn-primary" id="generateDocxBtn">
+                <i class="fa-solid fa-file-word"></i> Download Word (.docx)
+              </button>
+            </div>
+          </div>
+
+          <!-- Notification Banner for Scanned or Image File -->
+          <div class="info-alert" id="ocrAlert" style="display: none;">
+            <i class="fa-solid fa-circle-info"></i>
+            <div>
+              <strong>Image / Graphic Resume Detected:</strong> For direct OCR parsing of pictures and scans, enter your Gemini API key in <strong>AI OCR Settings</strong> or you can review and type details directly into the fields below.
+            </div>
+          </div>
+
+          <div class="editor-body">
+            
+            <!-- Candidate Identity -->
+            <div class="form-section">
+              <div class="section-header-row">
+                <h4 class="section-title"><i class="fa-solid fa-user"></i> Candidate Profile</h4>
+                <button type="button" class="btn-xs" id="swapNameTitleBtn" title="Swap Full Name and Professional Title"><i class="fa-solid fa-right-left"></i> Swap Name ⇄ Title</button>
+              </div>
+              <div class="grid-2">
+                <div class="form-group">
+                  <label>Full Name</label>
+                  <input type="text" id="candFullName" class="form-input" placeholder="e.g. John Doe">
+                </div>
+                <div class="form-group">
+                  <label>Professional Title</label>
+                  <input type="text" id="candTitle" class="form-input" placeholder="e.g. Principal Operations Manager">
+                </div>
+              </div>
+
+              <div class="grid-4 mt-2">
+                <div class="form-group">
+                  <label>Email</label>
+                  <input type="email" id="candEmail" class="form-input" placeholder="john@example.com">
+                </div>
+                <div class="form-group">
+                  <label>Phone</label>
+                  <input type="text" id="candPhone" class="form-input" placeholder="+1 (555) 000-0000">
+                </div>
+                <div class="form-group">
+                  <label>Location</label>
+                  <input type="text" id="candLocation" class="form-input" placeholder="Dallas, TX">
+                </div>
+                <div class="form-group">
+                  <label>LinkedIn</label>
+                  <input type="text" id="candLinkedin" class="form-input" placeholder="linkedin.com/in/johndoe">
+                </div>
+              </div>
+            </div>
+
+            <!-- Professional Summary -->
+            <div class="form-section">
+              <h4 class="section-title"><i class="fa-solid fa-align-left"></i> Executive Summary</h4>
+              <textarea id="candSummary" class="form-textarea" rows="4" placeholder="Brief executive summary highlighting background, leadership experience, and major career achievements..."></textarea>
+            </div>
+
+            <!-- Core Skills -->
+            <div class="form-section">
+              <div class="section-header-row">
+                <h4 class="section-title"><i class="fa-solid fa-bolt"></i> Core Competencies & Skills</h4>
+                <button type="button" class="btn-xs" id="addSkillBtn"><i class="fa-solid fa-plus"></i> Add Skill</button>
+              </div>
+              <div class="skills-tags-container" id="skillsContainer">
+                <!-- Dynamically populated tags -->
+              </div>
+              <div class="quick-add-skill-row">
+                <input type="text" id="newSkillInput" class="form-input" placeholder="Type a skill and press Enter...">
+                <button type="button" class="btn-secondary" id="confirmAddSkillBtn">Add</button>
+              </div>
+            </div>
+
+            <!-- Work Experience -->
+            <div class="form-section">
+              <div class="section-header-row">
+                <h4 class="section-title"><i class="fa-solid fa-briefcase"></i> Work Experience</h4>
+                <div class="section-actions-row">
+                  <button type="button" class="btn-xs" id="swapAllExpBtn" title="Swap Job Title and Company Name for all roles"><i class="fa-solid fa-right-left"></i> Swap All Title ⇄ Company</button>
+                  <button type="button" class="btn-xs" id="addExpBtn"><i class="fa-solid fa-plus"></i> Add Experience</button>
+                </div>
+              </div>
+              <div class="dynamic-items-container" id="experienceContainer">
+                <!-- Experience items populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Education -->
+            <div class="form-section">
+              <div class="section-header-row">
+                <h4 class="section-title"><i class="fa-solid fa-graduation-cap"></i> Education</h4>
+                <button type="button" class="btn-xs" id="addEduBtn"><i class="fa-solid fa-plus"></i> Add Degree</button>
+              </div>
+              <div class="dynamic-items-container" id="educationContainer">
+                <!-- Education items populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Certifications -->
+            <div class="form-section">
+              <div class="section-header-row">
+                <h4 class="section-title"><i class="fa-solid fa-certificate"></i> Certifications & Honors</h4>
+                <button type="button" class="btn-xs" id="addCertBtn"><i class="fa-solid fa-plus"></i> Add Certification</button>
+              </div>
+              <div class="certs-list-container" id="certsContainer">
+                <!-- Cert items populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Raw Extracted Text Drawer (for transparency / debugging) -->
+            <details class="raw-text-details">
+              <summary><i class="fa-solid fa-code"></i> View Raw Extracted Text</summary>
+              <textarea id="rawExtractedText" class="form-textarea code-font mt-2" rows="6" readonly></textarea>
+            </details>
+
+          </div>
+
+          <div class="card-footer">
+            <div class="footer-hint">
+              <i class="fa-solid fa-circle-check text-cyan"></i> The generated Word file includes your company header logo on every page.
+            </div>
+            <button class="btn-primary btn-lg" id="generateDocxBtnBottom">
+              <i class="fa-solid fa-file-word"></i> Generate & Download Word Document
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Download Ready Modal -->
+  <div class="modal-backdrop" id="downloadModal" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fa-solid fa-circle-check text-cyan"></i>
+          <span>Document Successfully Converted!</span>
+        </div>
+        <button class="modal-close" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body text-center">
+        <div class="modal-file-icon">
+          <i class="fa-solid fa-file-word"></i>
+        </div>
+        <h3 id="modalDocName">Alexander_Morgan_KeyDynamics_Resume.docx</h3>
+        <p class="modal-desc">Your branded Word document has been generated with the <strong>Key Dynamics Solutions</strong> header logo, typography, and styling.</p>
+        
+        <div class="modal-actions">
+          <a href="#" id="modalDownloadLink" class="btn-primary btn-lg" download>
+            <i class="fa-solid fa-download"></i> Download Word File (.docx)
+          </a>
+          <button type="button" class="btn-secondary" id="modalDismissBtn">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings / API Key Modal -->
+  <div class="modal-backdrop" id="settingsModal" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fa-solid fa-gear text-indigo"></i>
+          <span>AI OCR & Vision Settings</span>
+        </div>
+        <button class="modal-close" id="closeSettingsBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="settings-desc">
+          Pure text parsing for PDF, PPTX, and DOCX runs completely locally without any API key. If you are uploading <strong>scanned image resumes (PNG/JPG)</strong> or want Google Gemini 2.5 Flash to automatically detect complex layouts, provide your Gemini API key below:
+        </p>
+        <div class="form-group mt-3">
+          <label for="geminiApiKeyInput">Google Gemini API Key (Optional)</label>
+          <input type="password" id="geminiApiKeyInput" class="form-input" placeholder="AIzaSy...">
+          <small class="form-hint">Stored only in your browser session for direct parsing.</small>
+        </div>
+        <div class="modal-actions mt-4">
+          <button type="button" class="btn-primary" id="saveSettingsBtn">Save Settings</button>
+          <button type="button" class="btn-secondary" id="cancelSettingsBtn">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
